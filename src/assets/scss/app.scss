@@ -1,0 +1,9 @@
+//Bootstrap styles 
+@import "node_modules/bootstrap/scss/bootstrap";
+//Custom mixins
+@import "mixins/mixins";
+//Custom settings --
+@import "main";
+@import "settings";
+//Component specific styles 
+@import "components/callout";
