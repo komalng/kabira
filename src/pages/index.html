@@ -1,56 +1,72 @@
-<div class="contents">
-    {{#each videos}}
-    <div class="col-md-4 quarter card text-center" style="border: none;">
-        <div style="position: relative;">
-            <a data-fancybox href="https://www.youtube.com/watch?v={{this.video_id}}&autoplay=1">
-              <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/{{this.video_id}}/mqdefault.jpg">
-              <img src="{{root}}assets/img/playicon.png" class="playicon" />
-            </a>
-          </div>
-          <div class="card-body" style="background-color: #eee;">
-            <p class="card-text">
-              {{this.description}}
-            </p>
-          </div>        
-    </div>
-    {{/each}}
+<div class="col-12">
 </div>
 
-<div id="player"></div>
+<div class="contents">
+  {{#each videos}}
+  <div class="col-md-4 quarter card text-center" style="border: none;">
+    <div style="position: relative;" id="{{this.video_id}}">
+      <!-- data-fancybox href="https://www.youtube.com/watch?v={{this.video_id}}&autoplay=1" -->
+      <div onclick="playVideoCustom('{{this.video_id}}')">
+        <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/{{this.video_id}}/mqdefault.jpg">
+        <img src="{{root}}assets/img/playicon.png" class="playicon" />
+      </div>
+    </div>
+    <div class="card-body" style="background-color: #eee;">
+      <p class="card-text">
+        {{this.description}}
+      </p>
+    </div>
+  </div>
+  {{/each}}
+</div>
+
 <script src="//www.youtube.com/iframe_api"></script>
 
 <script>
-    /**
-     * Put your video IDs in this array
-     */
-    var videoIDs = [
-        'OdT9z-JjtJk',
-        'NlXTv5Ondgs'
-    ];
+  // https://developers.google.com/youtube/iframe_api_reference
 
-    var player, currentVideoId = 0;
+  var player, timer;
 
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-            height: '350',
-            width: '425',
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    }
+  function playVideoCustom(video_id) {
+    player = new YT.Player(video_id, {
+      height: $('#zRuOAjnY5aQ').height(),
+      width: $('#zRuOAjnY5aQ').width(),
+      videoId: video_id,
+      playerVars: {
+        autoplay: 1,
+        origin: window.location.origin,
+        autohide: 1,
+        host: `${window.location.protocol}//www.youtube.com`
+      },
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      }
+    });
+    // player.cueVideoById(video_id, 0);
+  }
 
-    function onPlayerReady(event) {
-        event.target.loadVideoById(videoIDs[currentVideoId]);
-    }
+  function myTimer() {
+    player.playVideo();
+  }
 
-    function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.ENDED) {
-            currentVideoId++;
-            if (currentVideoId < videoIDs.length) {
-                player.loadVideoById(videoIDs[currentVideoId]);
-            }
-        }
-    }
+  function onPlayerReady(event) {
+    player.setVolume(100);
+    player.playVideo();
+    timer = setInterval(myTimer, 2000);
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+      clearInterval(timer);
+      console.log("cleared interval");
+    };
+
+    //     // currentVideoId++;
+    //     // change it
+    //     if (currentVideoId < videoIDs.length) {
+    //         player.loadVideoById(currentVideoId);
+    //     }
+    // }
+  }
 </script>
