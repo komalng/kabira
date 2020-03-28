@@ -1,6 +1,6 @@
 <div class="contents">
     {{#each videos}}
-    <div class="col-md-4 quarter card" style="border: none;">
+    <div class="col-md-4 quarter card text-center" style="border: none;">
         <div style="position: relative;">
             <a data-fancybox href="https://www.youtube.com/watch?v={{this.video_id}}&autoplay=1">
               <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/{{this.video_id}}/mqdefault.jpg">
@@ -16,24 +16,41 @@
     {{/each}}
 </div>
 
-<!-- <section id="videos" class="container">
-    <div class="text-center">
-      <div class="row" style="justify-content: center;">
-        {{#each videos}}
-        <div class="card col-6 p-2" style="border: none;">
-          <div style="position: relative;">
-            <a data-fancybox href="https://www.youtube.com/watch?v={{this.video_id}}">
-              <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/{{this.video_id}}/mqdefault.jpg">
-              <img src="{{root}}assets/img/playicon.png" class="playicon" />
-            </a>
-          </div>
-          <div class="card-body" style="background-color: #eee;">
-            <p class="card-text">
-              {{this.description}}
-            </p>
-          </div>
-        </div>
-        {{/each}}
-      </div>
-    </div>
-  </section> -->
+<div id="player"></div>
+<script src="//www.youtube.com/iframe_api"></script>
+
+<script>
+    /**
+     * Put your video IDs in this array
+     */
+    var videoIDs = [
+        'OdT9z-JjtJk',
+        'NlXTv5Ondgs'
+    ];
+
+    var player, currentVideoId = 0;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '350',
+            width: '425',
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.loadVideoById(videoIDs[currentVideoId]);
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+            currentVideoId++;
+            if (currentVideoId < videoIDs.length) {
+                player.loadVideoById(videoIDs[currentVideoId]);
+            }
+        }
+    }
+</script>
