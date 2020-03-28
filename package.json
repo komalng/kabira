@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "gulp build",
-    "deploy": "gh-pages-deploy"
+    "deploy": "gh-pages-deploy",
+    "clean": "rm -rf dist"
   },
   "gh-pages-deploy": {
     "staticpath": "dist",
@@ -15,7 +16,7 @@
       "build"
     ],
     "post": [
-      "rm -rf dist"
+      "clean"
     ],
     "noprompt": true
   },
