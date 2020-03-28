@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "gulp build; git push origin :gh-pages && git subtree push --prefix dist origin gh-pages"
+    "build": "gulp build",
+    "deploy": "gh-pages-deploy"
   },
   "gh-pages-deploy": {
     "staticpath": "dist",
     "cname": "kabira.navgurukul.org",
     "prep": [
-      "gulp build"
+      "build"
     ],
     "post": [
       "rm -rf dist"
