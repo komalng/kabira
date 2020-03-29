@@ -5,7 +5,6 @@
   {{#each videos}}
   <div class="col-md-4 quarter card text-center" style="border: none;">
     <div style="position: relative;" id="{{this.video_id}}">
-      <!-- data-fancybox href="https://www.youtube.com/watch?v={{this.video_id}}&autoplay=1" -->
       <div onclick="playVideoCustom('{{this.video_id}}')">
         <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/{{this.video_id}}/mqdefault.jpg">
         <img src="{{root}}assets/img/playicon.png" class="playicon" />
@@ -25,9 +24,21 @@
 <script>
   // https://developers.google.com/youtube/iframe_api_reference
 
-  var player, timer;
+  var player, timer, video_id;
 
-  function playVideoCustom(video_id) {
+  function playVideoCustom(vid) {
+    $('.card iframe').each((index, value)=>{
+      var v_id = value.id;
+      var new_html = `<div style="position: relative;" id="`+v_id+`">
+        <div onclick="playVideoCustom('`+v_id+`')">
+          <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/`+v_id+`/mqdefault.jpg">
+          <img src="{{root}}assets/img/playicon.png" class="playicon" />
+        </div>
+      </div>` + $('#'+v_id).parent().children(":nth-child(2)")[0].outerHTML;
+      $('#'+v_id).parent().html(new_html);
+    });
+
+    video_id = vid;
     player = new YT.Player(video_id, {
       height: $('#zRuOAjnY5aQ').height(),
       width: $('#zRuOAjnY5aQ').width(),
@@ -43,7 +54,6 @@
         'onStateChange': onPlayerStateChange
       }
     });
-    // player.cueVideoById(video_id, 0);
   }
 
   function myTimer(target) {
@@ -52,7 +62,6 @@
 
   function onPlayerReady(event) {
     event.target.setVolume(100);
-    event.target.playVideo();
     timer = setInterval(myTimer, 2000, event.target);
   }
 
@@ -61,6 +70,16 @@
       clearInterval(timer);
       console.log("cleared interval");
     };
+
+    if (event.data == YT.PlayerState.ENDED) {
+      if ($('#'+video_id).parent().next().html()) {
+        video_id = $('#'+video_id).parent().next().children(":first").attr('id');
+      } else {
+        video_id = $('#Cnm7NQTtFag').parent().parent().children(":first").children(":first").attr('id');
+      }
+      // player.loadVideoById(video_id);
+      playVideoCustom(video_id)
+    }
 
     //     // currentVideoId++;
     //     // change it
