@@ -7,7 +7,24 @@ body {
 }
 
 .quarter {
-    padding: 0px;
+  padding: 0px;
+}
+
+.placeholder {
+  -webkit-filter: grayscale(0.5) brightness(50%);
+}
+
+.card-img-top {
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
+    opacity: .6;
+  }
 }
 
 @media(min-width:780px) {

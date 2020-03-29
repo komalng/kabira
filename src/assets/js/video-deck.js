@@ -6,7 +6,7 @@ backToThumbs = () => {
   $('.card iframe').each((index, value) => {
     var v_id = value.id;
     var new_html = `<div style="position: relative;" id="` + v_id + `">
-        <div onclick="playVideoCustom('`+ v_id + `')">
+        <div class="placeholder" onclick="playVideoCustom('`+ v_id + `')">
           <img class="card-img-top img-fluid" src="https://img.youtube.com/vi/`+ v_id + `/mqdefault.jpg">
           <img src="assets/img/playicon.png" class="playicon" />
         </div>
@@ -15,9 +15,13 @@ backToThumbs = () => {
   });
 }
 
+grayScale = () => {
+  $(".placeholder").css("webkitFilter", "grayscale(0.9) brightness(40%)");
+}
 playVideoCustom = (vid) => {
 
   backToThumbs();
+  grayScale();
 
   video_id = vid;
   player = new YT.Player(video_id, {
