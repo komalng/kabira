@@ -190,14 +190,14 @@
         // player.cueVideoById(video_id, 0);
       }
     
-      function myTimer() {
-        player.playVideo();
+      function myTimer(target) {
+        target.playVideo();
       }
     
       function onPlayerReady(event) {
-        player.setVolume(100);
-        player.playVideo();
-        timer = setInterval(myTimer, 2000);
+        event.target.setVolume(100);
+        event.target.playVideo();
+        timer = setInterval(myTimer, 2000, event.target);
       }
     
       function onPlayerStateChange(event) {
